@@ -4,7 +4,7 @@ const app = express();
 const cors = require("cors")
 const bcrypt = require("bcryptjs")
 const Camisetas = require("./models/camisetas")
-const PORT = 3004
+const PORT = process.env.PORT || 3004
 const mongoose = require("mongoose");
 
 //middlewares
@@ -94,6 +94,6 @@ app.get("/camisetas/:_id", async (req, res)=>{
 
 
 //Door
-app.listen(8080,()=>{
+app.listen(PORT,()=>{
     console.log("Running")
 })
