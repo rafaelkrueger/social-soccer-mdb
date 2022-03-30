@@ -60,12 +60,15 @@ app.get("/", (req,res)=>{
 
 app.get("/camisetas", async (req,res)=>{
 
-        const FindCamisa =  Camisetas.find().exec((err,camisa)=>{
-            return camisa;
-            console.log(camisa)
-        }
-        console.log(FindCamisa)
-    })
+    const main = async () =>{
+        await sleep(15000)
+        const FindCamisa = await Camisetas.find().exec((err,camisa)=>{
+            if(err)console.log(err)
+            res.send(camisa)
+        })
+    }
+    main();            
+})
 
 app.get("/camisetas-search", async (req,res)=>{
     
