@@ -65,6 +65,7 @@ app.get("/camisetas", async (req,res)=>{
         const FindCamisa = await Camisetas.find().exec((err,camisa)=>{
             if(err)console.log(err)
             res.send(camisa)
+            console.log(camisa)
         })
     }
     main();            
