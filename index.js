@@ -51,6 +51,12 @@ newCamisa.save((err, camisa)=>{
     console.log("Deleted")
 })*/
 
+app.get("/", (req,res)=>{
+
+    res.send("working!")    
+
+})
+
 
 app.get("/camisetas", async (req,res)=>{
 
@@ -61,12 +67,11 @@ app.get("/camisetas", async (req,res)=>{
             res.send(camisa)
         })
     }
-    main();        
-    
+    main();            
 })
 
 app.get("/camisetas-search", async (req,res)=>{
-
+    
     const main = async () =>{
         await sleep(15000)
         const FindCamisa = await Camisetas.findAll().exec((err,camisa)=>{
