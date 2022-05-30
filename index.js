@@ -2,10 +2,11 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
 const cors = require("cors")
-const bcrypt = require("bcryptjs")
 const Camisetas = require("./models/camisetas")
 const PORT = process.env.PORT || 3004
 const mongoose = require("mongoose");
+const stripe = require("stripe")("sk_test_51IXWAzI065aszrHxziqFhlIvzUnV8kYKL1GOulI7Xp0EvAFm6aAIFdo75wuhl4CqByb92fGeryTh9oHrP4jTVchN00SNCKdTzb")
+
 
 //middlewares
 app.use(express.json())
