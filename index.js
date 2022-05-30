@@ -8,6 +8,7 @@ const PORT = process.env.PORT || 3004
 const mongoose = require("mongoose");
 const stripe = require("stripe")("sk_test_51IXWAzI065aszrHxziqFhlIvzUnV8kYKL1GOulI7Xp0EvAFm6aAIFdo75wuhl4CqByb92fGeryTh9oHrP4jTVchN00SNCKdTzb")
 const uuid = require("uuid")
+
 //middlewares
 app.use(express.json())
 app.use(bodyParser.urlencoded({extended:true}))
@@ -61,7 +62,13 @@ app.get("/", (req,res)=>{
 
 app.get("/camisetas", async (req,res)=>{
 
-    const main = async () =>{
+    const FindCamisa =  Camisetas.find().exec((err,camisa)=>{
+        return camisa;
+        console.log(camisa)
+    }
+    console.log(FindCamisa)
+})
+    /*    const main = async () =>{
         await sleep(15000)
         const FindCamisa = await Camisetas.find().exec((err,camisa)=>{
             if(err)console.log(err)
@@ -70,6 +77,7 @@ app.get("/camisetas", async (req,res)=>{
     }
     main();            
 })
+*/
 /*
 app.get("/camisetas-search", async (req,res)=>{
     search = req.body.search
