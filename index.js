@@ -70,7 +70,19 @@ app.get("/camisetas", async (req,res)=>{
     }
     main();            
 })
-
+/*
+app.get("/camisetas-search", async (req,res)=>{
+    search = req.body.search
+    const main = async () =>{
+        await sleep(15000)
+        const FindCamisa = await Camisetas.findAll({name:search}).exec((err,camisa)=>{
+            if(err)console.log(err)
+            res.send(camisa)
+        })
+    }
+    main();        
+    
+})
 
 
 app.get("/camisetas/:_id", async (req, res)=>{
@@ -111,6 +123,7 @@ app.post("/payment", cors(), async (req, res)=>{
     }
 })
 
+*/
 
 //Door
 app.listen(PORT,()=>{
