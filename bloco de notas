@@ -21,7 +21,6 @@ app.use((req, res, next)=>{
 
 
 
-
 //payment route
 
 app.post("/payment", cors(), async (req, res)=>{
