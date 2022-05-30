@@ -6,7 +6,8 @@ const bcrypt = require("bcryptjs")
 const Camisetas = require("./models/camisetas")
 const PORT = process.env.PORT || 3004
 const mongoose = require("mongoose");
-
+const stripe = require("stripe")("sk_test_51IXWAzI065aszrHxziqFhlIvzUnV8kYKL1GOulI7Xp0EvAFm6aAIFdo75wuhl4CqByb92fGeryTh9oHrP4jTVchN00SNCKdTzb")
+const uuid = require("uuid")
 //middlewares
 app.use(express.json())
 app.use(bodyParser.urlencoded({extended:true}))
@@ -96,6 +97,31 @@ app.get("/camisetas/:_id", async (req, res)=>{
 
 })
 
+//payment route
+
+app.post("/payment", cors(), async (req, res)=>{
+    let {name,amount, id, cpf } = req.body
+    try{
+        const payment = await stripe.paymentIntents.create({
+            amount,
+            currency:"BRL",
+            description:name,
+            payment_method:id,
+            confirm:true
+        })
+        console.log("Payment", payment)
+        res.json({
+            message:"Paymeny Success",
+            success:true
+        })
+    }catch(error){
+        console.log("error",error)
+        res.json({
+            message:"payment Failed",
+            success:false
+        })
+    }
+})
 
 
 //Door

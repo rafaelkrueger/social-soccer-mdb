@@ -13,12 +13,13 @@
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
+    "dotenv": "^16.0.1",
     "express": "^4.17.1",
     "handlebars": "^4.7.7",
     "mongodb": "^4.4.1",
     "mongoose": "^5.13.13",
     "nodemon": "^2.0.12",
     "react-router-dom": "^5.3.0",
-    "stripe": "^8.199.0"
+    "stripe": "^8.222.0"
   }
 }
