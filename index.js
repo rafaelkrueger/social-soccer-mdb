@@ -70,7 +70,7 @@ app.get("/camisetas", async (req,res)=>{
     main();            
 })
 
-app.get("/camisetas-search", async (req,res)=>{
+app.post("/camisetas-search", async (req,res)=>{
     search = req.body.search
     const main = async () =>{
         await sleep(15000)
