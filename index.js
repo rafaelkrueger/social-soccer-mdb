@@ -71,19 +71,10 @@ app.get("/camisetas", async (req,res)=>{
 })
 
 app.post("/camisetas-search", async (req,res)=>{
-    search = req.body.search
-    const main = async () =>{
-        await sleep(15000)
-        const FindCamisa = await Camisetas.findAll({name:search}).exec((err,camisa)=>{
-            if(err)console.log(err)
-            res.send(camisa)
-        })
-    }
-    main();        
+
+    console.log("ola")
     
 })
-
-
 
 app.get("/camisetas/:_id", async (req, res)=>{
     const main = async () =>{
