@@ -3,9 +3,10 @@ const bodyParser = require("body-parser");
 const app = express();
 const cors = require("cors")
 const Camisetas = require("./models/camisetas")
+const Customer = require("./models/customer")
 const PORT = process.env.PORT || 3004
 const mongoose = require("mongoose");
-const stripe = require("stripe")("sk_test_51IXWAzI065aszrHxziqFhlIvzUnV8kYKL1GOulI7Xp0EvAFm6aAIFdo75wuhl4CqByb92fGeryTh9oHrP4jTVchN00SNCKdTzb")
+const stripe = require("stripe")("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")
 
 //middlewares
 app.use(express.json())
@@ -32,6 +33,26 @@ const sleep = (ms) =>{
     return new Promise((resolve) => setTimeout(resolve,ms))
 }
 
+app.post("/new-costumer", (req,res)=>{
+    let {name,email, cpf, cellphone, cep, rua, bairro, cidade, estado, camisetas } = req.body  
+    const newCustomer = new Customer({
+    name:name,
+    email:email,
+    cpf:cpf,
+    cellphone:cellphone,
+    cep:cep,
+    rua:rua,
+    bairro:bairro,
+    cidade:cidade,
+    estado:estado,
+    camisetas:camisetas
+    })
+    newCustomer.save((err, customer)=>{
+        if(err) console.log(err)
+        console.log(customer)
+    })  
+
+})
 /*const newCamisa = new Camisetas({
     name:"Paris Saint German",
     description:"dasjdlaskjdslkajld",
@@ -106,7 +127,8 @@ app.post("/payment", cors(), async (req, res)=>{
             currency:"BRL",
             description:name,
             payment_method:id,
-            confirm:true
+            metadata:{name},
+            confirm:true,
         })
         console.log("Payment", payment)
         res.json({
