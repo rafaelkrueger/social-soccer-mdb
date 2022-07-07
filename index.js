@@ -11,6 +11,7 @@ const PORT = process.env.PORT || 3004
 const mongoose = require("mongoose");
 const stripe = require("stripe")("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")
 
+/*Pix Gerencianet
 const axios = require("axios")
 const fs = require('fs')
 const path = require("path")
@@ -65,6 +66,7 @@ axios({
             console.log(response.data)
         }).catch((err)=>console.log(err))
         }).catch((err)=>console.log(err))
+*/
 
 //middlewares
 app.use(express.json())
