@@ -40,8 +40,32 @@ axios({
     data:{
         grant_type:'client_credentials'
     }
-    }).then((response)=>{console.log(response.data)})
-    
+    }).then((response)=>{
+        const accessToken = response.data?.access_token
+        const endpoint = `${process.env.GN_ENDPOINT}/v2/cob`
+        const dataCob = {
+            calendario:{
+                expiracao:3600
+            },
+            valor:{
+                original:'100.00'
+            },
+            chave:'126bec4a-2eb6-4b79-a045-78db68412899',
+            solicitacaoPagador:'Cobrança Camiseta de Time'
+        }
+        const config = {
+        httpsAgent:agent,
+        headers:{
+            Authorization:`Bearer ${accessToken}`,
+            'Content-Type':'application/json',
+        }
+    }
+    axios.post(endpoint, dataCob, config)
+        .then((response)=>{
+            console.log(response.data)
+        }).catch((err)=>console.log(err))
+        }).catch((err)=>console.log(err))
+
 //middlewares
 app.use(express.json())
 app.use(bodyParser.urlencoded({extended:true}))
