@@ -1,3 +1,6 @@
+if(process.env.NODE_ENV !== 'production'){
+    require('dotenv').config()
+}
 const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
@@ -8,6 +11,37 @@ const PORT = process.env.PORT || 3004
 const mongoose = require("mongoose");
 const stripe = require("stripe")("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")
 
+const axios = require("axios")
+const fs = require('fs')
+const path = require("path")
+const https = require('https')
+
+const cert = fs.readFileSync(
+    path.resolve(__dirname, `./certs/${process.env.GN_CERT_PROD}`)
+)
+
+const agent= new https.Agent({
+    pfx:cert,
+    passphrase:'',
+})
+
+const credentials = Buffer.from(
+    process.env.GN_CLIENT_ID + ':' + process.env.GN_CLIENT_SECRET
+).toString('base64')
+
+axios({
+    method:'POST',
+    url:`${process.env.GN_ENDPOINT}/oauth/token`,
+    headers:{
+        Authorization:`Basic ${credentials}`,
+        'Content-Type':'application/json',
+    },
+    httpsAgent: agent,
+    data:{
+        grant_type:'client_credentials'
+    }
+    }).then((response)=>{console.log(response.data)})
+    
 //middlewares
 app.use(express.json())
 app.use(bodyParser.urlencoded({extended:true}))
@@ -53,17 +87,8 @@ app.post("/new-costumer", (req,res)=>{
     })  
 
 })
-/*const newCamisa = new Camisetas({
-    name:"Paris Saint German",
-    description:"dasjdlaskjdslkajld",
-    image:"daskdçaskdçasdk",
-    value:55,
-    size:"M"
-})
-newCamisa.save((err, camisa)=>{
-    if(err) console.log(err)
-    console.log(camisa)
-})*/
+
+
 
 /*Camisetas.findOneAndDelete({name:"dsads"},(err)=>{
     if(err){
