@@ -11,11 +11,15 @@ const PORT = process.env.PORT || 3004
 const mongoose = require("mongoose");
 const stripe = require("stripe")("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")
 
-/*Pix Gerencianet
+
+/*Pix Gerencianet*/
+
 const axios = require("axios")
 const fs = require('fs')
 const path = require("path")
 const https = require('https')
+app.set('view engine', 'ejs')
+app.set('views','./views')
 
 const cert = fs.readFileSync(
     path.resolve(__dirname, `./certs/${process.env.GN_CERT_PROD}`)
@@ -30,7 +34,9 @@ const credentials = Buffer.from(
     process.env.GN_CLIENT_ID + ':' + process.env.GN_CLIENT_SECRET
 ).toString('base64')
 
-axios({
+
+app.get('/pix', async (req,res)=>{
+    const authResponse = await axios({
     method:'POST',
     url:`${process.env.GN_ENDPOINT}/oauth/token`,
     headers:{
@@ -41,32 +47,42 @@ axios({
     data:{
         grant_type:'client_credentials'
     }
-    }).then((response)=>{
-        const accessToken = response.data?.access_token
-        const endpoint = `${process.env.GN_ENDPOINT}/v2/cob`
-        const dataCob = {
-            calendario:{
-                expiracao:3600
-            },
-            valor:{
-                original:'100.00'
-            },
-            chave:'126bec4a-2eb6-4b79-a045-78db68412899',
-            solicitacaoPagador:'Cobrança Camiseta de Time'
-        }
-        const config = {
+    });
+
+    const accessToken = await authResponse.data?.access_token
+
+    const reqGN = axios.create({
+        baseURL: process.env.GN_ENDPOINT,
         httpsAgent:agent,
         headers:{
             Authorization:`Bearer ${accessToken}`,
-            'Content-Type':'application/json',
+            'Content-Type':'application/json'
         }
-    }
-    axios.post(endpoint, dataCob, config)
-        .then((response)=>{
-            console.log(response.data)
-        }).catch((err)=>console.log(err))
-        }).catch((err)=>console.log(err))
-*/
+    });
+
+    const dataCob = {
+        calendario:{
+            expiracao:3600
+        },
+        valor:{
+            original:'100.00'
+        },
+        chave:'de5d1466-f483-4911-839e-4ab70227dec6',
+        solicitacaoPagador:'Cobrança Camiseta de Time'
+    };
+
+    //const cobResponse = await reqGN.post(`/v2/cob`, dataCob).catch((err)=>{console.log(err)});
+    //const qrcodeResponse = reqGN.get(`/v2/loc/${cobResponse.data.loc.id}/qrcode`).catch((err)=>console.log(err));
+    //res.render('qrcode', {qrcodeImage:qrcodeResponse.data.imagemQrcode})
+})
+    
+app.post('/webhook(/pix)?', (req,res)=>{
+    console.log(req.body)
+    res.send('200')
+})
+
+
+
 
 //middlewares
 app.use(express.json())
@@ -113,15 +129,6 @@ app.post("/new-costumer", (req,res)=>{
     })  
 
 })
-
-
-
-/*Camisetas.findOneAndDelete({name:"dsads"},(err)=>{
-    if(err){
-        console.log(err)
-    }
-    console.log("Deleted")
-})*/
 
 app.get("/", (req,res)=>{
 
@@ -203,3 +210,12 @@ app.post("/payment", cors(), async (req, res)=>{
 app.listen(PORT,()=>{
     console.log("Running")
 })
+
+
+
+/*Camisetas.findOneAndDelete({name:"dsads"},(err)=>{
+    if(err){
+        console.log(err)
+    }
+    console.log("Deleted")
+})*/
